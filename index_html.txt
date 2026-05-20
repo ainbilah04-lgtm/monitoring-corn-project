@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agro-Product Tech: Corn Growth Rate Calculus Dashboard</title>
+    <!-- Chart.js for Animated Charting -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Tailwind CSS for clean, modern dashboard styling -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800 min-h-screen p-4 md:p-8">
+
+    <div class="max-w-6xl mx-auto space-y-6">
+        
+        <!-- Header Section -->
+        <header class="bg-gradient-to-r from-amber-600 to-emerald-700 rounded-2xl p-6 md:p-8 text-white shadow-lg">
+            <span class="bg-amber-500/30 text-amber-100 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">
+                SFP: Agro Product Technology
+            </span>
+            <h1 class="text-2xl md:text-4xl font-bold mt-2">Application of Derivatives in Monitoring Corn Growth Rate</h1>
+            <p class="text-amber-100 mt-2 max-w-3xl text-sm md:text-base">
+                An interactive bioscience simulation using calculus to map the daily instantaneous height growth velocity of Malaysian grain corn (<em>Zea mays</em>) over a 100-day production cycle.
+            </p>
+        </header>
+
+        <!-- Main Dashboard Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- Left Panel: Formulas and Methodology -->
+            <div class="space-y-6 lg:col-span-1">
+                <!-- Mathematical Models Card -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
+                    <h2 class="text-lg font-bold text-stone-900 border-b border-stone-100 pb-3 mb-4 flex items-center gap-2">
+                        <span>📐</span> Calculus Modeling
+                    </h2>
+                    
+                    <div class="space-y-4 text-sm">
+                        <div>
+                            <span class="block text-xs font-semibold text-stone-400 uppercase">Height Function f(x)</span>
+                            <div class="bg-stone-50 p-3 rounded-lg font-mono text-emerald-700 font-semibold mt-1 text-center">
+                                f(x) = -0.0006x³ + 0.092x² - 1.2x + 10
+                            </div>
+                            <p class="text-xs text-stone-500 mt-1">Calculates total vertical crop height in centimeters (cm) at Day x.</p>
+                        </div>
+
+                        <div>
+                            <span class="block text-xs font-semibold text-stone-400 uppercase">Growth Velocity f'(x)</span>
+                            <div class="bg-stone-50 p-3 rounded-lg font-mono text-amber-700 font-semibold mt-1 text-center">
+                                f'(x) = -0.0018x² + 0.184x - 1.2
+                            </div>
+                            <p class="text-xs text-stone-500 mt-1">Gives the precise structural extension rate in centimeters per day (cm/day).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bioscience Context Card -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
+                    <h2 class="text-lg font-bold text-stone-900 border-b border-stone-100 pb-3 mb-3 flex items-center gap-2">
+                        <span>🌽</span> Bioscience Context
+                    </h2>
+                    <p class="text-xs text-stone-600 leading-relaxed">
+                        In corn agronomy, tracking the instantaneous derivative ($f'(x)$) lets farmers optimize nitrogen side-dressing fertilizer windows. Peak height acceleration corresponds with massive nitrogen requirements right before the crop enters its critical tasseling and silking windows.
+                    </p>
+                    <div class="mt-4 bg-amber-50 rounded-xl p-3 border border-amber-100 text-xs text-amber-800">
+                        <strong>Data Baseline Reference:</strong> Simulated lifecycle trends adapted from physiological profiles seen in Malaysian crop expansion studies (e.g., <em>MARDI - Malaysian Agricultural Research and Development Institute</em> profiles for domestic grain maize trials).
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel: Interactive Chart & Analysis Engine -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Live Chart Container -->
+                <div class="bg-white rounded-2xl p-4 md:p-6 shadow-sm border border-stone-200">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+                        <div>
+                            <h2 class="text-lg font-bold text-stone-900">Interactive 100-Day Height Trajectory</h2>
+                            <p class="text-xs text-stone-500">Click along the line chart tracking data nodes to analyze growth rates at different stages.</p>
+                        </div>
+                        <div class="text-xs bg-stone-100 font-medium px-2.5 py-1 rounded-md text-stone-600 self-start sm:self-center">
+                            X-Axis: Day 5 to Day 100
+                        </div>
+                    </div>
+                    
+                    <!-- Chart wrapper -->
+                    <div class="relative w-full h-[300px] md:h-[400px]">
+                        <canvas id="cornChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Dynamic Calculus Inspector Output Window -->
+                <div id="inspectorPanel" class="bg-stone-900 rounded-2xl p-6 text-white shadow-xl transition-all duration-300 border-2 border-stone-850">
+                    <div id="welcomePrompt" class="text-center py-4">
+                        <span class="text-2xl">🌱</span>
+                        <p class="font-medium mt-1 text-sm text-stone-400">Derivative Inspector Operational</p>
+                        <p class="text-xs text-stone-500 max-w-sm mx-auto mt-1">Click a marker on the graph above to compute the plant's structural expansion speed for that day.</p>
+                    </div>
+
+                    <div id="inspectorContent" class="hidden grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+                        <div class="space-y-1">
+                            <span class="text-xs font-bold text-amber-400 tracking-wider uppercase">Crop Age</span>
+                            <div class="text-3xl font-black font-mono text-white" id="outAge">--</div>
+                            <span class="text-xs text-stone-400">Days since planting</span>
+                        </div>
+                        <div class="space-y-1 bg-stone-800/50 p-3 rounded-xl border border-stone-700">
+                            <span class="text-xs font-bold text-emerald-400 tracking-wider uppercase">Plant Height f(x)</span>
+                            <div class="text-2xl font-bold font-mono text-emerald-300" id="outHeight">--</div>
+                            <span class="text-xs text-stone-400">Total physical standing</span>
+                        </div>
+                        <div class="space-y-1 bg-stone-800/50 p-3 rounded-xl border border-stone-700">
+                            <span class="text-xs font-bold text-amber-400 tracking-wider uppercase">Growth Speed f'(x)</span>
+                            <div class="text-2xl font-bold font-mono text-amber-300" id="outDerivative">--</div>
+                            <span class="text-xs text-stone-400">Rate: cm elongation / day</span>
+                        </div>
+                        <div class="md:col-span-3 border-t border-stone-800 pt-4 mt-2">
+                            <span class="text-xs font-bold text-stone-400 block mb-1 uppercase tracking-wider">Agro-Product Diagnostic Explanation:</span>
+                            <p id="outExplanation" class="text-sm text-stone-200 leading-relaxed italic">--</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <footer class="text-center text-xs text-stone-400 pt-4">
+            Agro-Product Technology Educational Resource • Simulated using specialized cubic agricultural equations.
+        </footer>
+    </div>
+
+    <script>
+        // Generate dataset markers spanning the typical crop duration lifecycle
+        const labels = [];
+        const heightData = [];
+        const derivativeData = [];
+
+        function getHeight(x) {
+            return (-0.0006 * Math.pow(x, 3)) + (0.092 * Math.pow(x, 2)) - (1.2 * x) + 10;
+        }
+
+        function getDerivative(x) {
+            return (-0.0018 * Math.pow(x, 2)) + (0.184 * x) - 1.2;
+        }
+
+        // Generate data at 5-day intervals across the 100 day crop span
+        for (let x = 5; x <= 100; x += 5) {
+            labels.push(x);
+            heightData.push(parseFloat(getHeight(x).toFixed(1)));
+            derivativeData.push(parseFloat(getDerivative(x).toFixed(2)));
+        }
+
+        function updateInspector(day, hVal, dVal) {
+            document.getElementById('welcomePrompt').classList.add('hidden');
+            document.getElementById('inspectorContent').classList.remove('hidden');
+            
+            document.getElementById('outAge').innerText = "Day " + day;
+            document.getElementById('outHeight').innerText = hVal.toFixed(1) + " cm";
+            document.getElementById('outDerivative').innerText = dVal.toFixed(2) + " cm/day";
+            
+            const panel = document.getElementById('inspectorPanel');
+            const expText = document.getElementById('outExplanation');
+            
+            // Contextual rules based on physiological phases of corn development
+            if (day <= 30) {
+                panel.className = "bg-stone-900 rounded-2xl p-6 text-white shadow-xl transition-all duration-300 border-2 border-amber-500";
+                expText.innerHTML = `At <strong>Day ${day}</strong>, the corn is in its early <strong>Vegetative Lag Phase</strong>. The growth rate is relatively low (+${dVal.toFixed(2)} cm/day) as energy is directed down to build the nodal root architecture below the soil line. Keep basic herbicide applications steady.`;
+            } else if (day > 30 && day <= 60) {
+                panel.className = "bg-stone-900 rounded-2xl p-6 text-white shadow-xl transition-all duration-300 border-2 border-emerald-500";
+                expText.innerHTML = `At <strong>Day ${day}</strong>, the corn is in its peak <strong>Logarithmic Rapid Elongation Phase</strong>. Growth is aggressive at +${dVal.toFixed(2)} cm/day! The derivative shows that structural elongation is near or at maximum speed. This is the ultimate window for nitrogen side-dressing fertilization to optimize kernel potential.`;
+            } else if (day > 60 && day <= 75) {
+                panel.className = "bg-stone-900 rounded-2xl p-6 text-white shadow-xl transition-all duration-300 border-2 border-teal-500";
+                expText.innerHTML = `At <strong>Day ${day}</strong>, the derivative is dropping (+${dVal.toFixed(2)} cm/day) even though the plant is tall. The corn has transitioned to the <strong>Tasseling and Silking reproductive phases</strong>. Vertical height growth is deliberately braking as structural resource allocation moves into kernel generation.`;
+            } else {
+                panel.className = "bg-stone-900 rounded-2xl p-6 text-white shadow-xl transition-all duration-300 border-2 border-stone-500";
+                expText.innerHTML = `At <strong>Day ${day}</strong>, the growth speed derivative has dropped near zero (+${dVal.toFixed(2)} cm/day). The plant has achieved its absolute maximum structural height. It has reached <strong>Physiological Maturity</strong>; moisture levels are dropping in the field as kernels dry down, signaling preparation for machine mechanical harvesting.`;
+            }
+        }
+
+        // Render Chart canvas
+        const ctx = document.getElementById('cornChart').getContext('2d');
+        const cornChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Corn Height f(x)',
+                    data: heightData,
+                    borderColor: 'rgb(217, 119, 6)',
+                    backgroundColor: 'rgba(217, 119, 6, 0.08)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.3,
+                    pointRadius: 6,
+                    pointHoverRadius: 9,
+                    pointBackgroundColor: 'rgb(16, 185, 129)'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Days Post-Planting (Lifecycle timeline)',
+                            font: { weight: 'bold' }
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Standing Total Crop Height (cm)',
+                            font: { weight: 'bold' }
+                        },
+                        min: 0,
+                        max: 220
+                    }
+                },
+                onClick: (e) => {
+                    const points = cornChart.getElementsAtEventForMode(e, 'nearest', { intersect: false }, true);
+                    if (points.length > 0) {
+                        const idx = points[0].index;
+                        updateInspector(labels[idx], heightData[idx], derivativeData[idx]);
+                        cornChart.setActiveElements([{datasetIndex: 0, index: idx}]);
+                        cornChart.update();
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
