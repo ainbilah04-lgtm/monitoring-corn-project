@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SFP: Agro Product Technology - Premium View</title>
+    <style>
+        :root {
+            --bg-body: #f0f4f8;
+            --primary: #0a4d7a;
+            --accent-green: #2ecc71;
+            --accent-yellow: #f1c40f;
+            --text-main: #333;
+            --shadow-soft: 0 8px 30px rgba(0,0,0,0.1);
+            --font-main: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .main-container {
+            width: 100%;
+            max-width: 1100px;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: var(--shadow-soft);
+            overflow: hidden;
+        }
+
+        /* HEADER */
+        .header-section {
+            background: linear-gradient(135deg, var(--primary) 0%, #1c6ca1 100%);
+            color: #fff;
+            padding: 40px;
+            text-align: center;
+            border-bottom: 5px solid var(--accent-green);
+        }
+
+        .header-section h1 {
+            margin: 0;
+            font-size: 32px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .header-section p {
+            margin: 10px 0 0;
+            opacity: 0.9;
+            font-size: 16px;
+        }
+
+        /* CONTENT */
+        .content-body {
+            padding: 40px;
+        }
+
+        /* SIMULATION CONTROLS */
+        .controls-card {
+            background: #fdfdfd;
+            border: 1px solid #e1e8ed;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            text-align: center;
+        }
+
+        .slider-header {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .slider-header span {
+            color: var(--accent-green);
+            font-size: 28px;
+            margin-left: 10px;
+        }
+
+        input[type=range] {
+            width: 100%;
+            max-width: 600px;
+            height: 10px;
+            -webkit-appearance: none;
+            background: #dbeaf9;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid #fff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            transition: background 0.3s;
+        }
+
+        input[type=range]::-webkit-slider-thumb:hover {
+            background: #27ae60;
+        }
+
+        /* DATA CARDS GRID */
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .info-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 25px;
+            border-left: 5px solid var(--accent-green);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-meta {
+            font-size: 12px;
+            color: #7f8c8d;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .card-value {
+            font-size: 36px;
+            font-weight: 800;
+            color: #2c3e50;
+        }
+
+        .card-unit {
+            font-size: 16px;
+            color: #7f8c8d;
+            font-weight: 400;
+        }
+
+        .math-formula {
+            font-family: 'Courier New', monospace;
+            background: #f4f7f6;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #555;
+            margin-top: 15px;
+            display: inline-block;
+        }
+
+        /* DIAGNOSTIC PANEL */
+        .diagnostic-section {
+            background: linear-gradient(to bottom right, #fff 0%, #fffef0 100%);
+            border: 1px solid #f9ebae;
+            border-radius: 15px;
+            padding: 30px;
+            position: relative;
+        }
+
+        .diagnostic-section::before {
+            content: '🔍';
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 30px;
+            opacity: 0.2;
+        }
+
+        .diagnostic-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #b7950b;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .diagnostic-text {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #5d4037;
+            /* Animation for text update */
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        /* FOOTER */
+        .footer-section {
+            text-align: center;
+            padding: 25px;
+            font-size: 13px;
+            color: #95a5a6;
+            border-top: 1px solid #eee;
+            background: #fafafa;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="main-container">
+    <div class="header-section">
+        <h1>SFP: Agro Product Technology</h1>
+        <p>Aplikasi Kalkulus untuk Pemantauan Kitaran Pertumbuhan Jagung Malaysian Grain</p>
+    </div>
+
+    <div class="content-body">
+        
+        <div class="controls-card">
+            <label class="slider-header" for="daySlider">Kitaran Pertumbuhan: Hari <span id="dayDisplay">45</span></label>
+            <input type="range" id="daySlider" min="5" max="100" value="45">
+            <p style="color: #7f8c8d; font-size: 14px; margin-top: 10px;">(Gunakan slider untuk melihat perubahan fasa pertumbuhan)</p>
+        </div>
+
+        <div class="data-grid">
+            
+            <div class="info-card">
+                <div class="card-meta">Model Fisiologi</div>
+                <div class="card-title">Ketinggian Fizikal f(x)</div>
+                <div class="card-value"><span id="heightDisplay">87.6</span><span class="card-unit"> cm</span></div>
+                <div class="math-formula">f(x) = -0.0006x³ + 0.092x² - 1.2x + 10</div>
+            </div>
+
+            <div class="info-card" style="border-left-color: var(--accent-yellow);">
+                <div class="card-meta">Kadar Pertumbuhan Seketika</div>
+                <div class="card-title">Halaju Pemanjangan f'(x)</div>
+                <div class="card-value"><span id="velocityDisplay">3.43</span><span class="card-unit"> cm/hari</span></div>
+                <div class="math-formula">f'(x) = -0.0018x² + 0.184x - 1.2</div>
+            </div>
+
+        </div>
+
+        <div class="diagnostic-section">
+            <div class="diagnostic-title">
+                <span>📋</span> Penjelasan Diagnostik Agronomi
+            </div>
+            <div id="diagnosticText" class="diagnostic-text">Memuatkan data...</div>
+        </div>
+
+    </div>
+
+    <div class="footer-section">
+        Agro-Product Technology Educational Resource • Data berdasarkan profil fisiologi kajian MARDI.
+    </div>
+</div>
+
+<script>
+    const slider = document.getElementById('daySlider');
+    const dayDisplay = document.getElementById('dayDisplay');
+    const heightDisplay = document.getElementById('heightDisplay');
+    const velocityDisplay = document.getElementById('velocityDisplay');
+    const diagnosticText = document.getElementById('diagnosticText');
+
+    function calculateGrowth(x) {
+        // f(x) = -0.0006x³ + 0.092x² - 1.2x + 10
+        let height = (-0.0006 * Math.pow(x, 3)) + (0.092 * Math.pow(x, 2)) - (1.2 * x) + 10;
+        
+        // f'(x) = -0.0018x² + 0.184x - 1.2
+        let velocity = (-0.0018 * Math.pow(x, 2)) + (0.184 * x) - 1.2;
+
+        // Ensure height doesn't go below 0
+        if (height < 0) height = 0;
+
+        return {
+            height: height.toFixed(1),
+            velocity: velocity.toFixed(2)
+        };
+    }
+
+    function updateDiagnostic(x, velocity) {
+        let message = "";
+        if (x >= 5 && x < 20) {
+            message = `<strong>Fasa Penubuhan Awal (Early Establishment):</strong> Pokok baru bertunas. Halaju pertumbuhan perlahan (${velocity} cm/hari). Keperluan air adalah kritikal pada tahap ini.`;
+        } else if (x >= 20 && x < 40) {
+            message = `<strong>Fasa Permulaan Vegetatif:</strong> Pertumbuhan batang bermula secara stabil. Kadar pertumbuhan meningkat aggressively (${velocity} cm/hari).`;
+        } else if (x >= 40 && x <= 55) {
+            message = `<strong>Fasa Pemanjangan Pantas Logaritma (Logarithmic Rapid Elongation Phase):</strong> Pertumbuhan sangat agresif pada kadar +${velocity} cm/hari! Halaju struktur f'(x) berada pada paras maksimum. <strong>Ini adalah tetingkap terbaik untuk pembajaan sulingan nitrogen (nitrogen side-dressing)</strong>.`;
+        } else if (x > 55 && x < 75) {
+            message = `<strong>Fasa Kritikal Pembungaan (Tasseling & Silking):</strong> Pertumbuhan ketinggian mula perlahan kerana tenaga pokok dialihkan untuk pembentukan bunga jantan (tassel) dan rambut jagung (silk).`;
+        } else {
+            message = `<strong>Fasa Kematangan & Pengisian Bijian:</strong> Pertumbuhan ketinggian fizikal hampir berhenti sepenuhnya (f'(x) menghampiri sifar). Nutrien menumpukan untuk matangkan biji jagung. Sedia dituai menjelang hari ke-100.`;
+        }
+
+        // Trigger animation by resetting the HTML content
+        diagnosticText.innerHTML = message;
+        diagnosticText.style.animation = 'none';
+        diagnosticText.offsetHeight; /* trigger reflow */
+        diagnosticText.style.animation = null; 
+    }
+
+    function updateUI() {
+        const x = parseFloat(slider.value);
+        const data = calculateGrowth(x);
+
+        dayDisplay.innerText = x;
+        heightDisplay.innerText = data.height;
+        velocityDisplay.innerText = data.velocity;
+        
+        updateDiagnostic(x, data.velocity);
+    }
+
+    // Attach event listener
+    slider.addEventListener('input', updateUI);
+
+    // Initial load
+    updateUI();
+</script>
+
+</body>
+</html>
